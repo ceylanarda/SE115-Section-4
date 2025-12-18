@@ -1,26 +1,60 @@
-import java.util.Arrays;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Scanner;
+import java.io.FileWriter;
 public class sc1 {
-    public static int[] resizeRoster(int[] oldRoster, int newSize) {
-        int[] newRoster = new int[newSize];
-        int copy = Math.min(oldRoster.length, newSize);
-        for (int i = 0; i < copy; i++) {
-            newRoster[i] = oldRoster[i];
+    public static void main(String[] args) {
+        Scanner sc = null;
+        FileWriter fw = null;
+
+        String[] kelimeler = new String[100];
+        int[] sayılar = new int[100];
+
+        int farklıkelime = 0;
+        int toplamkelime = 0;
+
+        try {
+            sc = new Scanner(Paths.get("q1.txt"));
+
+            while (sc.hasNextLine()) {
+                String kelime = sc.nextLine();
+                toplamkelime++;
+
+                boolean farklı = false;
+
+                for (int i = 0; i < farklıkelime; i++) {
+                    if (kelimeler[i].equals(kelime)) {
+                        sayılar[i] = sayılar[i] + 1;
+                        farklı = true;
+                        break;
+                    }
+                }
+                if (!farklı) {
+                    kelimeler[farklıkelime] = kelime;
+                    sayılar[farklıkelime] = 1;
+                    farklıkelime++;
+                }
+
+            }
+            fw = new FileWriter("word_stats.txt");
+            String header = "Toplam kelime sayısı: " + toplamkelime + " Kelime Frekansları";
+            System.out.println(header);
+            fw.write(header);
+
+            for(int i =0;i<farklıkelime;i++){
+                String sonuc = kelimeler[i] + ": " + sayılar[i];
+
+                System.out.println(sonuc);
+                fw.write(sonuc);
+            }
+}
+        catch(IOException e){
+                e.printStackTrace();
+            }
+        finally{
+                if (sc != null) sc.close();
         }
-        return newRoster;
-    }
-    public static void main(String[] args){
-        final int oldsize = 20;
-        int [] oldRoster = new int[oldsize];
-        int startid = 1000;
-        for (int i=0;i<oldsize; i++){
-            oldRoster[i] = startid + i;
-        }
-        final int newsize = 42;
-        System.out.println("Old one ("+oldRoster.length + " ID's):");
-        System.out.println(Arrays.toString(oldRoster));
-        System.out.println("New Roster (" + newsize + " slots):");
-        System.out.print("[");
-        for (int i =0; i<22; i++){
-        }
+        System.out.println("correct");
+        System.out.println("Dosya kaydedildi.");
     }
 }

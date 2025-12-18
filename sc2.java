@@ -1,20 +1,56 @@
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
 public class sc2 {
-    public static long power(long base, int exp){
-        if (exp<0){
-            System.out.println("Exponent can't be negative.");
-        }
-        if(exp == 0) return 1;
-        return base * power(base, exp-1);
-    }
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter your base: ");
-        long base = sc.nextInt();
-        System.out.print("Enter your Exponent: ");
-        int exp = sc.nextInt();
-        System.out.println();
-        long result = power(base, exp);
-        System.out.println(result);
+
+        System.out.println("Enter filepath: ");
+        String filepath = sc.nextLine();
+
+        System.out.println("Enter word to change: ");
+        String word = sc.nextLine();
+
+        System.out.println("Enter new word: ");
+        String newword = sc.nextLine();
+
+        System.out.println("Enter new filepath: ");
+        String newpath = sc.nextLine();
+
+        Scanner fileReader = null;
+        FileWriter fileWriter = null;
+
+        try{
+            fileReader = new Scanner(Paths.get(filepath));
+            fileWriter = new FileWriter(newpath);
+            // 3. Dosyayı oku ve değiştir
+            while (fileReader.hasNextLine()) {
+                String line = fileReader.nextLine();
+
+                // Kelimeyi değiştir
+                String modifiedLine = line.replace(word, newword);
+
+                // Değiştirilmiş satırı yeni dosyaya yaz
+                fileWriter.write(modifiedLine + System.lineSeparator());
+            }
+            System.out.println("İslem basariyla tamamlandi!");
+            System.out.println("'" + word + "' kelimeleri '" + newword + "' ile degistirildi.");
+            System.out.println("Sonuc sunun içine kaydedildi: " + newpath);
+
+        } catch (IOException e) {
+            System.out.println("Hata olustu: " + e.getMessage());
+        } finally {
+            try {
+                if (fileReader != null) fileReader.close();
+                if (fileWriter != null) fileWriter.close();
+                if (sc != null) sc.close();
+            } catch (IOException e) {
+                System.out.println("Dosya okunamadı veya yol yanlış.");
+            }
+        }
     }
 }
+
+
+
